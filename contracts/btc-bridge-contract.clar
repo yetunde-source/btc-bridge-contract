@@ -57,3 +57,13 @@
 )
 
 (define-map bridge-balances principal uint)
+
+;; public functions
+;; Initializes the bridge by setting the paused state to false. Only the contract deployer can call this function.
+(define-public (initialize-bridge)
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (var-set bridge-paused false)
+        (ok true)
+    )
+)
