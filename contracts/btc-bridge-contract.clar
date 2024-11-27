@@ -221,3 +221,21 @@
         (ok true)
     )
 )
+
+;; Allows the contract deployer to perform an emergency withdrawal.
+(define-public (emergency-withdraw (amount uint) (recipient principal))
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (asserts! (>= (var-get total-bridged-amount) amount) (err ERROR-INSUFFICIENT-BALANCE))
+        (asserts! (is-valid-principal recipient) (err ERROR-INVALID-RECIPIENT-ADDRESS))
+        
+        (let (
+            (current-balance (default-to u0 (map-get? bridge-balances recipient)))
+            (new-balance (+ current-balance amount))
+        )
+            (asserts! (> new-balance current-balance) (err ERROR-INVALID-AMOUNT))
+            (map-set bridge-balances recipient new-balance)
+            (ok true)
+        )
+    )
+)
