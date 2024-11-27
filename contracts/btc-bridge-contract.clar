@@ -86,3 +86,13 @@
         (ok true)
     )
 )
+
+;; Adds a validator to the bridge. Only the contract deployer can call this function.
+(define-public (add-validator (validator principal))
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (asserts! (is-valid-principal validator) (err ERROR-INVALID-VALIDATOR-ADDRESS))
+        (map-set validators validator true)
+        (ok true)
+    )
+)
