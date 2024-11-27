@@ -191,3 +191,33 @@
         )
     )
 )
+
+;; Withdraws an amount from the bridge to a Bitcoin recipient address.
+(define-public (withdraw 
+    (amount uint)
+    (btc-recipient (buff 34))
+)
+    (let (
+        (current-balance (get-bridge-balance tx-sender))
+    )
+        (asserts! (not (var-get bridge-paused)) (err ERROR-BRIDGE-PAUSED))
+        (asserts! (>= current-balance amount) (err ERROR-INSUFFICIENT-BALANCE))
+        (asserts! (validate-deposit-amount amount) (err ERROR-INVALID-AMOUNT))
+        
+        (map-set bridge-balances
+            tx-sender
+            (- current-balance amount)
+        )
+        
+        (print {
+            type: "withdraw",
+            sender: tx-sender,
+            amount: amount,
+            btc-recipient: btc-recipient,
+            timestamp: block-height
+        })
+        
+        (var-set total-bridged-amount (- (var-get total-bridged-amount) amount))
+        (ok true)
+    )
+)
