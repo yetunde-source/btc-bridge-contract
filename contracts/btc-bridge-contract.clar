@@ -76,3 +76,13 @@
         (ok true)
     )
 )
+
+;; Resumes the bridge if it is paused. Only the contract deployer can call this function.
+(define-public (resume-bridge)
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (asserts! (var-get bridge-paused) (err ERROR-INVALID-BRIDGE-STATUS))
+        (var-set bridge-paused false)
+        (ok true)
+    )
+)
