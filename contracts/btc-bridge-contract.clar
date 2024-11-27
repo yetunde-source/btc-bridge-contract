@@ -67,3 +67,12 @@
         (ok true)
     )
 )
+
+;; Pauses the bridge. Only the contract deployer can call this function.
+(define-public (pause-bridge)
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-DEPLOYER) (err ERROR-NOT-AUTHORIZED))
+        (var-set bridge-paused true)
+        (ok true)
+    )
+)
