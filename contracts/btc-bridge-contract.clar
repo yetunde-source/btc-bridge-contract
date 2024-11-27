@@ -239,3 +239,24 @@
         )
     )
 )
+
+;; read only functions
+;; Retrieves the details of a deposit using the transaction hash.
+(define-read-only (get-deposit (tx-hash (buff 32)))
+    (map-get? deposits {tx-hash: tx-hash})
+)
+
+;; Retrieves the current status of the bridge (paused or not).
+(define-read-only (get-bridge-status)
+    (var-get bridge-paused)
+)
+
+;; Checks if a given principal is a validator.
+(define-read-only (get-validator-status (validator principal))
+    (default-to false (map-get? validators validator))
+)
+
+;; Retrieves the bridge balance of a user.
+(define-read-only (get-bridge-balance (user principal))
+    (default-to u0 (map-get? bridge-balances user))
+)
