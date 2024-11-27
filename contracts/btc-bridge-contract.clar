@@ -269,3 +269,38 @@
         (not (is-eq address (as-contract tx-sender)))
     )
 )
+
+;; Validates if a given Bitcoin address is valid.
+(define-read-only (is-valid-btc-address (btc-addr (buff 33)))
+    (and
+        (is-eq (len btc-addr) u33)
+        (not (is-eq btc-addr 0x000000000000000000000000000000000000000000000000000000000000000000))
+        true
+    )
+)
+
+;; Validates if a given transaction hash is valid.
+(define-read-only (is-valid-tx-hash (tx-hash (buff 32)))
+    (and
+        (is-eq (len tx-hash) u32)
+        (not (is-eq tx-hash 0x0000000000000000000000000000000000000000000000000000000000000000))
+        true
+    )
+)
+
+;; Validates if a given signature is valid.
+(define-read-only (is-valid-signature (signature (buff 65)))
+    (and
+        (is-eq (len signature) u65)
+        (not (is-eq signature 0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000))
+        true
+    )
+)
+
+;; Validates if a given deposit amount is within the allowed range.
+(define-read-only (validate-deposit-amount (amount uint))
+    (and 
+        (>= amount MIN-DEPOSIT-AMOUNT)
+        (<= amount MAX-DEPOSIT-AMOUNT)
+    )
+)
