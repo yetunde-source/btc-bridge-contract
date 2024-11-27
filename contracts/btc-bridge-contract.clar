@@ -31,3 +31,8 @@
 (define-constant MIN-DEPOSIT-AMOUNT u100000)
 (define-constant MAX-DEPOSIT-AMOUNT u1000000000)
 (define-constant REQUIRED-CONFIRMATIONS u6)
+
+;; data vars
+(define-data-var bridge-paused bool false)
+(define-data-var total-bridged-amount uint u0)
+(define-data-var last-processed-height uint u0)
